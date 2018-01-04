@@ -1,19 +1,13 @@
 #include<iostream>
 using namespace std;
+
 template <class Type>
-void copy(Type a[],Type b[],int p,int q)
-{
-  for(int i=p;i<=q;i++)
-  {
-    a[i]=b[i];
-  }
-}
-template <class Type>
-void merge(Type a[],Type b[],int p,int q,int r)
+void merge(Type a[],int p,int q,int r)
 {
   int i=p;
   int j=q+1;
-  int k=p;
+  int k=0;
+  Type b[r-p+1];
   while(i<=q&&j<=r)
   {
     if(a[i]<=a[j])
@@ -34,6 +28,10 @@ void merge(Type a[],Type b[],int p,int q,int r)
     {
       b[k++]=a[j++];
     }
+    for(int i=0;i<r-p+1;i++)
+    {
+      a[i+p]=b[i];
+    }
 }
 template <class Type>
 void mergeSort(Type a[],int p,int r)
@@ -43,10 +41,7 @@ void mergeSort(Type a[],int p,int r)
     int q=(p+r)/2;
     mergeSort(a,p,q);
     mergeSort(a,q+1,r);
-    Type* b=new Type[r-p+1];
-    merge(a,b,p,q,r);
-    copy(a,b,p,r);
-    //delete []b;
+    merge(a,p,q,r);
   }
 }
 int main()
