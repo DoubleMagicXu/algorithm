@@ -1,39 +1,34 @@
-##include<iostream>
-uisng namespace std;
-void matrixChain(int *p,int length,int ** m,int **s);//矩阵个数为length个
-void traceBack(int i,int j,int **s);
-int  main()
+#include<iostream>
+using namespace std;
+template <class Type>
+void mul(int *p,int n,Type *m,Type *s )
 {
-  return 0;
-}
-void matrixChain(int *p,int length,int ** m,int **s)
-{
-  //首先初始化矩阵
+  //数组p长度为n+1
   for(int i=0;i<n;i++)
   {
-    m[i][i]=0;
+    m[i][i]=0;//初始化１
   }
-  //应该是三重循环
-  for(int l=1;l<=n-1;l++)//矩阵之间间隔
+  for(int r=2;r<=n;r++)//长度
   {
-    for(int i=0;i<length-l;i++)
-    {
-      int j=i+l;//末尾=起始+间隔
-      //首先初始化
-      m[i][j]=m[i][i]+m[i+1]m[j]+p[i]*p[i+1]*p[j+1];
-      s[i][j]=i;//在i处断开
-      for(int k=i;k<j;k++)
+      for(int i=0;i<=n-r;i++)//起始
       {
-        int temp=m[i][k]+m[k+1][j]+p[i]*p[k+1]*p[j+1];
-        if(temp<m[i][j])
+        int j=i+r-1;//末尾
+        m[i][j]=m[i+1][j]+p[i]*p[i+1]*p[j+1];//注意
+        s[i][j]=i;
+        for(int k=i+1;k<j;k++)
         {
-          m[i][j]=temp;
+          int t=m[i][k]+m[k+1][j]+p[i]*p[k+1]*p[j+1];
+          if(t<m[i][j])
+          {
+            m[i][j]=t;
+            s[i][j]=k;
+          }
         }
       }
-    }
   }
 }
-void traceBack(int i,int j,int **s)
+template <class Type>
+void traceBack(int i,int j,Type *s)
 {
   if(i==j)
   {
@@ -41,6 +36,16 @@ void traceBack(int i,int j,int **s)
   }
   traceBack(i,s[i][j],s);
   traceBack(s[i][j]+1,j,s);
-  cout<<"Multipy A"<<i<<","<<s[i][j];
-  cout<<"and A"<<(s[i][j]+1)<<","<<j<<endl;
+  cout<<"multiply A"<<i<<","<<s[i][j];
+  cout<<"and A"<<s[i][j]+1<<","<<j<<endl;
+}
+int main()
+{
+  int p[7]={30,35,15,5,10,20,25};
+  int m[6][6];
+  int s[6][6];
+  mul(p,6,m,s);
+  cout<<m[0][5]<<endl;
+  traceBack(0,5,s);
+  return 0;
 }

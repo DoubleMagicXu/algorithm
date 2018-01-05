@@ -1,42 +1,49 @@
+/*************************************************************************
+	> File Name: 快速排序.cpp
+	> Author:
+	> Mail:
+	> Created Time: 2017年07月05日 星期三 21时14分23秒
+ ************************************************************************/
+
 #include<iostream>
+#include<algorithm>
 using namespace std;
-int partition(int *a,int start,int end);
-void quickSort(int *a,int start,int end);
-void Swap(int *a ,int *b)
+template <class Type>
+int partition(Type a[],int p,int r)
 {
-  int temp=*a;
-  *a=*b;
-  *b=temp;
+  int i=p;
+  int j=r+1;
+  Type x=a[p];
+  while(true)
+  {
+
+    while(a[++i]<x&&i<r);
+    while(a[--j]>x);
+    if(i>=j)break;
+    swap(a[i],a[j]);
+
+  }
+  a[p]=a[j];
+  a[j]=x;
+  return j;
+}
+template <class Type>
+void quickSort(Type a[],int p,int r)
+{
+  if(p<r)
+  {
+    int q=partition(a,p,r);
+    quickSort(a,p,q-1);
+    quickSort(a,q+1,r);
+  }
 }
 int main()
 {
+  int a[10]={10,9,8,7,6,5,4,3,2,1};
+  quickSort(a,0,9);
+  for(int i=0;i<10;i++)
+  {
+    cout<<a[i]<<endl;
+  }
   return 0;
-}
-void quickSort(int *a,int start,int end)
-{
-  if(start<end)
-  {
-    int middle=partition(a,start,end);
-    quickSort(a,start,middle-1);
-    quickSort(a,middle+1,end);
-  }
-}
-int partition(int *a,int start,int end)//分割
-{
-  int i=start;
-  int j=end+1;
-  int key=a[start];
-  while(true)
-  {
-    while(a[++i]<key&&i<end);
-    while(a[--j]>key);
-    if(i>=j)
-    {
-      break;
-    }
-    Swap(a[i],a[j]);
-  }
-  a[start]=a[j];//注意
-  a[j]=key;
-  return j;
 }
